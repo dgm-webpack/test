@@ -29,8 +29,6 @@ const obj = [
 
 ]
 const getEntry = () => {
-
-
     const file = "/src/brands/js/"
     let fileLenght = file.length
     const entry = {};
