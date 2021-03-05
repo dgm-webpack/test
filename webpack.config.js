@@ -8,25 +8,36 @@ const HtmlWebpackPlugin = require('html-webpack-plugin') //引用資源，輸入
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const glob = require('glob');
 const obj = [
-    {   //brands
+    {   //brands (一次性，不壓縮)
         js_main: './src/brands/js/main2.js',
         img: './src/brands/scss',
-        img_publicPath: '../PRE/',
-        img_outputPath: 'PRE',
-        css_outputPath: 'PRE/[name].css',
+        img_publicPath: '../PRE/', //輸出的檔案or資料夾名稱(依當時時專案改名)
+        img_outputPath: 'PRE', //輸出的檔案or資料夾名稱(依當時時專案改名)
+        css_outputPath: 'PRE/[name].css', //輸出的檔案or資料夾名稱(依當時時專案改名)
         html_template: './src/brands/code/index.html',
-        html_filename: 'code/index.html'
+        html_filename: 'code/index.html', //輸出的檔案or資料夾名稱
+        minimize: false //輸出時不壓縮
     },
     {   //brita
-        js_main: './src/brita/js/main.js',
-        img: './src/brita/images',
+        js_main: './src/brita/caseName/js/main.js',//輸出的檔案or資料夾名稱(依當時時專案改名)
+        img: './src/brita/caseName/images',//輸出的檔案or資料夾名稱(依當時時專案改名)
         img_publicPath: '../images/',
         img_outputPath: 'images',
         css_outputPath: 'images/[name].css',
-        html_template: './src/brita/index.html',
-        html_filename: 'index.html'
+        html_template: './src/brita/caseName/index.html', //輸出的檔案or資料夾名稱(依當時時專案改名)
+        html_filename: 'index.html',
+        minimize: true
     },
-
+    {   //order
+        js_main: './src/order/caseName/js/main.js',//輸出的檔案or資料夾名稱(依當時時專案改名)
+        img: './src/order/caseName/images',//輸出的檔案or資料夾名稱(依當時時專案改名)
+        img_publicPath: '../images/',
+        img_outputPath: 'images',
+        css_outputPath: 'images/[name].css',
+        html_template: './src/order/caseName/index.html', //輸出的檔案or資料夾名稱(依當時時專案改名)
+        html_filename: 'index.html',
+        minimize: true
+    },
 ]
 const getEntry = () => {
     const file = "/src/brands/js/"
@@ -46,7 +57,7 @@ const getEntry = () => {
 //
 var config = {
     mode: 'development', //development開發；production生產(預設)
-    entry: obj[0].js_main, //進入點，引入各種類的檔案，包括圖片或css  //obj[0].js_main
+    entry: obj[1].js_main, //進入點，引入各種類的檔案，包括圖片或css  //obj[1].js_main
     output: { //輸出
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/[name].[hash].js',
@@ -62,7 +73,7 @@ var config = {
     },
     resolve: {
         alias: {
-            '@img': path.resolve(obj[0].img), //*** */
+            '@img': path.resolve(obj[1].img), //*** */
             '@src': path.resolve(__dirname, 'src/act02/js'),
             '@demoImg': path.resolve(__dirname, 'assets/icon'),
         },
@@ -77,30 +88,7 @@ var config = {
                 //postcss-loader自動加上劉覽器前綴詞。sass-loader編譯scss檔為css
                 //MiniCssExtractPlugin.loader輸出css到指定的資料夾
             },
-            // {
-            //     test: /\.(scss)$/,
-            //     use: [
-            //     //     {
-            //     //     loader: 'style-loader', // inject CSS to page
-            //     // },
-            //     {
-            //         loader: 'css-loader', // translates CSS into CommonJS modules
-            //     },
-            //     {
-            //         loader: 'postcss-loader', // Run post css actions
-            //         options: {
-            //             plugins: function () { // post css plugins, can be exported to postcss.config.js
-            //                 return [
-            //                     require('precss'),
-            //                     require('autoprefixer')
-            //                 ];
-            //             }
-            //         }
-            //     },
-            //     {
-            //         loader: 'sass-loader' // compiles Sass to CSS
-            //     }]
-            // },
+            
 
             {
                 test: /\.(png|jpg|jpeg|svg|gif)$/,
@@ -110,30 +98,23 @@ var config = {
                         options: {
                             name: '[name].[ext]', //經過打包後，輸出的名稱。name是原檔名。ext是副檔名
                             // publicPath: 'http://127.0.0.1:5500/dist/images/', //在輸出的css引用時的路徑，用相對位址
-                            publicPath: obj[0].img_publicPath,
-                            outputPath: obj[0].img_outputPath, ////輸出的資料夾名稱
+                            publicPath: obj[1].img_publicPath,
+                            outputPath: obj[1].img_outputPath, ////輸出的資料夾名稱
                             limit: 1024, //對小於1024B大小的圖片進行base64格式的轉化處理
                             esModule: false, //配合html-withimg-loader，在html內的圖片路徑，不轉換預設路徑，而是照html上寫好的路徑。true该配置项为图片打包后的默认路径，带default对象
                             emitFile: true
                         }
                     },
-                    // { //新增的區塊
-                    //     loader: 'image-webpack-loader',
-                    //     options: { byPassOnDebug: true }
-                    // },
-
                 ]
             },
-
             {
                 test: /\.html$/i,
                 loader: 'html-loader',
             },
-
         ]
     },
     optimization: {
-        minimize: false, //是否壓縮，會影響css和js
+        minimize: obj[1].minimize, //是否壓縮，會影響css和js
         minimizer: [
             new TerserPlugin({
                 test: /\.js(\?.*)?$/i,
@@ -142,7 +123,7 @@ var config = {
                     // exclude: /\/main/, //跳過的檔案
                     // parallel: true, //加速編譯
                     output: {
-                        comments: false, //
+                        comments: obj[1].minimize, //是否壓縮
                     },
                     compress: {
                         warnings: false,
@@ -151,18 +132,19 @@ var config = {
                     },
                 },
             }),
-            // new OptimizeCssAssetsWebpackPlugin(), //壓縮css檔
+            new OptimizeCssAssetsWebpackPlugin(), //壓縮css檔
+            
         ]
     },
     plugins: [
         new CleanWebpackPlugin(),//清空dist資料夾
 
         new MiniCssExtractPlugin({
-            filename: obj[0].css_outputPath,//將css檔放到指定的資料夾
+            filename: obj[1].css_outputPath,//將css檔放到指定的資料夾
         }),
         new HtmlWebpackPlugin({ //引用資源，輸入及要輸出的檔名
-            template: obj[0].html_template, //*** */
-            filename: obj[0].html_filename,
+            template: obj[1].html_template, //*** */
+            filename: obj[1].html_filename,
             // minify: false,
             // chunks: ['main'],//指定需要引入的js，沒有設置默認全部引入
             inject: 'true', //打包之后的js插入的位置，true/'head'/'body'/false,
@@ -176,12 +158,8 @@ var config = {
                 collapseWhitespace: false, // 改爲false//折疊有助於文檔樹中文本節點的空白
                 preserveLineBreaks: true, //當標籤之間的空格包含換行符時，請務必合攏到1個換行符（永遠不要將其完全刪除）。必須與collapseWhitespace=true
                 removeAttributeQuotes: false, // 改爲false//移除空白
-                // sortAttributes: true, //按頻率對屬性進行排序
-                // sortClassName: true, //按頻率對樣式類進行排序
-                // ignoreCustomFragments: [/<\*>/] ,
-                // customAttrCollapse: /<\*>/ 
-                // more options:
-                // https://github.com/kangax/html-minifier#options-quick-reference
+                sortAttributes: true, //按頻率對屬性進行排序
+                sortClassName: true, //按頻率對樣式類進行排序
             },
             //chunksSortMode: 'dependency'
         }),
@@ -195,7 +173,7 @@ var config = {
             //  在`server`模式下，分析器將啟動HTTP伺服器來顯示軟體包報告。
             //  在“靜態”模式下，會生成帶有報告的單個HTML檔案。
             //  在`disabled`模式下，你可以使用這個外掛來將`generateStatsFile`設定為`true`來生成Webpack Stats JSON檔案。
-            analyzerMode: "server",
+            analyzerMode: "static",
             //  將在“伺服器”模式下使用的主機啟動HTTP伺服器。
             analyzerHost: "127.0.0.1",
             //  將在“伺服器”模式下使用的埠啟動HTTP伺服器。
@@ -210,7 +188,7 @@ var config = {
             //  在預設瀏覽器中自動開啟報告
             openAnalyzer: true,
             //  如果為true，則Webpack Stats JSON檔案將在bundle輸出目錄中生成
-            generateStatsFile: false,
+            generateStatsFile: true,
             //  如果`generateStatsFile`為`true`，將會生成Webpack Stats JSON檔案的名字。
             //  相對於捆綁輸出目錄。
             statsFilename: "stats.json",
