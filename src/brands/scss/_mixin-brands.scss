@@ -1,0 +1,447 @@
+@charset "UTF-8";
+/* ///////////////// */
+/* 字尺寸--*/
+/* ///////////////// */
+// 字體
+$moFont: 0.8;
+
+$bs1_pc: 45px; //66-->45
+$bs1_pm: 5vw;
+$bs1_mo: 6vw;
+
+$bs2_pc: 40px; //66-->45
+$bs2_pm: 4.5vw;
+$bs2_mo: 4.7vw;
+
+$bs3_pc: 30px; //-42--->30
+$bs3_pm: 3.3370vw;
+$bs3_mo: 3.75vw;
+
+$bb1_pc: 64px; //-q&a
+$bb1_pm: 7.11902vw;
+$bb1_mo: 5vw;
+
+$bb2_pc: 32px; //-q&a_q
+$bb2_pm: 4.1157vw;
+$bb2_mo: 5.1vw;
+
+$bb3_pc: 27px; //-特點介紹標題 37-->27
+$bb3_pm: 2.9vw;
+$bb3_mo: 4.6vw;
+
+$bb4_pc: 23.5px; //-特點介紹內文1   32-->23.5
+$bb4_pm: 2.5vw;
+$bb4_mo: 4vw;//3.75--->4.5
+
+$bb5_pc: 24px; //-特點介紹內文2---29pt-->25
+$bb5_pm: 2.6vw;
+$bb5_mo: 3.7vw;//--37--->33
+
+
+$bb6_pc: 20px; //長編內文、產品明細
+$bb6_pm: 2.2247vw;
+$bb6_mo: 3.9vw;
+
+
+
+$fontWidth_B: 900;
+$fontWidth_M: 800;
+$fontWidth_C: 500;
+$fontWidth_S: 200;
+/* ///////////////// */
+/* 顏色--*/
+/* ///////////////// */
+$color0: #3b3b3b;
+$color1: #0076b8;
+$color2: #063484;
+$color3: #006cb2;
+$color4: #c0a42b;
+$color5: #3a3a3a;
+$color6: #424242;
+$color7: #666666;
+
+/* ---------------------------------
+Common Behaviors
+--------------------------------- */
+
+/* 覆寫官網樣式，避免全頁 <p> 都為 12px */
+div.product-detail-info-tabs .tab-details p {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.noaction {
+  pointer-events: none;
+  user-select: none;
+}
+/* ---------------------------------
+Common Styles
+--------------------------------- */
+a img {
+  border: none;
+}
+.visible-xs-block,
+.visible-xs-inline,
+.visible-xs-inline-block,
+.visible-sm-block,
+.visible-sm-inline,
+.visible-sm-inline-block,
+.visible-md-block,
+.visible-md-inline,
+.visible-md-inline-block,
+.visible-lg-block,
+.visible-lg-inline,
+.visible-lg-inline-block {
+  display: none;
+}
+
+#pre {
+  * {
+    box-sizing: border-box;
+  }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6,
+  a,
+  li {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    
+  }
+  *{
+    font-size: 100%;
+    font-family: "Microsoft JhengHei";
+  }
+  // ul,li{
+  //   list-style: none;
+  // }
+
+  .color0 {
+    color: $color0;
+  }
+  .color1 {
+    color: $color1;
+  }
+  .color2 {
+    color: $color2;
+  }
+  .color3 {
+    color: $color3;
+  }
+  .color4 {
+    color: $color4;
+  }
+  .color5 {
+    color: $color5;
+  }
+  .color6 {
+    color: $color6;
+  }
+  .color7 {
+    color: $color7;
+  }
+
+
+
+  .bs1 {
+    //1
+    font-size: $bs1_pc;
+    line-height: 1.3;
+    @media (max-width: 899px) {
+      font-size: $bs1_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bs1_mo;
+    }
+  }
+  .bs2 {
+    //1
+    font-size: $bs2_pc;
+    line-height: 1.5;
+    @media (max-width: 899px) {
+      font-size: $bs2_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bs2_mo;
+    }
+  }
+
+  .bs3 {
+    font-size: $bs3_pc;
+    line-height: 1.3em;
+    @media (max-width: 899px) {
+      font-size: $bs3_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bs3_mo;
+    }
+  }
+
+  .bb1 {
+    font-size: $bb1_pc;
+    line-height: 1.3em;
+    @media (max-width: 899px) {
+      font-size: $bb1_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bb1_mo;
+    }
+  }
+  .bb2 {
+    //4
+    font-size: $bb2_pc;
+    line-height: 1.3;
+    @media (max-width: 899px) {
+      font-size: $bb2_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bb2_mo;
+    }
+  }
+  .bb3 {
+    font-size: $bb3_pc;
+    line-height: 1.3;
+    @media (max-width: 899px) {
+      font-size: $bb3_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bb3_mo;
+    }
+  }
+  .bb4 {
+    font-size: $bb4_pc;
+    line-height: 1.3;
+    @media (max-width: 899px) {
+      font-size: $bb4_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bb4_mo;
+    }
+  }
+
+  .bb5 {
+    font-size: $bb5_pc;
+    line-height: 1.3;
+    @media (max-width: 899px) {
+      font-size: $bb5_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bb5_mo;
+    }
+  }
+
+  .bb6,p,.p {
+    font-size: $bb6_pc;
+    line-height: 1.3;
+    @media (max-width: 899px) {
+      font-size: $bb6_pm;
+    }
+    @media (max-width: 639px) {
+      font-size: $bb6_mo;
+    }
+  }
+
+  
+
+  .fontWidth_B {
+    font-weight: $fontWidth_B;
+  }
+  .fontWidth_M {
+    font-weight: $fontWidth_M;
+  }
+  .fontWidth_C {
+    font-weight: $fontWidth_C;
+  }
+  .fontWidth_S {
+    font-weight: $fontWidth_S;
+  }
+  .lineHight1 {
+    line-height: 1;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-left {
+    text-align: left;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+  .text-justify {
+    text-align: justify;
+    text-justify: inter-ideograph;
+    -ms-text-justify: inter-ideograph;
+    -moz-text-justify: inter-ideograph;
+  }
+  a {
+    display: block;
+  }
+  .textSmall {
+    transform: scale(0.9) translateX(-5%);
+    -moz-transform: none;
+  }
+  //////////////////////
+
+
+/* cofing */
+
+
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  line-height: 1;
+  font-size: 16px;
+  margin: 0 auto;
+  overflow: hidden;
+  @media only screen and (max-width: 639px) {
+    margin: 0;
+  }
+
+  .inner-container {
+    // min-width: 900px;
+    width: 100%;
+    max-width: 900px;
+    text-align: justify;
+    // vertical-align: baseline;
+  }
+
+  section {
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: contain !important;
+  }
+  section img {
+    max-width: 900px;
+    width: 100%;
+    vertical-align: middle;
+  }
+  section > div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+  section .img-title {
+    position: relative;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    text-indent: -10000%;
+    background-size: contain;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  section .s-block {
+    position: absolute;
+    display: block;
+    width: 100%;
+    word-wrap: break-word;
+    // padding: 0 7.5%;
+    padding: 0;
+  }
+  section .s-block:after {
+    content: "";
+    display: inline-block;
+    width: 100%;
+  }
+
+  section ul.list li {
+    position: absolute;
+  }
+  
+  section .info {
+    position: relative;
+  }
+
+  .inline-block{
+    display: inline-block;
+    width: auto;
+  }
+  section .quote {
+    position: relative;
+    margin-top: 1%;
+    margin-left: 8%;
+    @media only screen and (max-width: 639px) {
+      margin-top: -1%;
+    }
+  }
+  section .quote::after {
+    content: "___";
+    position: absolute;
+    top: -31%;
+    left: -9%;
+  }
+  section.offer {
+    position: fixed;
+    bottom: 0px;
+    margin: 0 auto;
+    max-width: 900px;
+    width: 100%;
+    z-index: 3;
+    @media only screen and (max-width: 899px) {
+      left: 0;
+    }
+    @media only screen and (max-width: 639px) {
+      max-width: 639px;
+    }
+  }
+  section.offer a {
+    display: block;
+    // position: absolute;
+    // width: 50%;
+    height: 100%;
+    left: 0%;
+    // border: 1px solid;
+  }
+  section.offer .aLeft {
+    left: 0%
+  }
+  section.offer .aRight {
+    left: 50%
+  }
+
+  section.offer a.aItem4 {
+    width: (85% / 4);
+    display: inline-table;
+    // border: 1px solid #000;
+    margin-right: 0%;
+  }
+  section.offer a.aItem4.mm{
+    margin-left: 6%;
+  }
+  section.offer a.aItem4.mm2{
+    width: (85% / 4)+5%;
+    @media only screen and (max-width: 350px) {
+      width: (85% / 4);
+    }
+  }
+
+  .dig_visible-lg {
+    display: block!important;
+    @media only screen and (max-width: 639px) {
+      display: none!important;
+    }
+  }
+  .dig_visible-xs {
+    display: none!important;
+    @media only screen and (max-width: 639px) {
+      display: block!important;
+    }
+  }
+}

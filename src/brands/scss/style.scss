@@ -1,0 +1,20 @@
+@import 'mixin-brands';
+@import 'mind';
+@import '_demo1';
+
+
+
+// 自訂需載入的元件
+@import "variables";
+// @import "~bootstrap/scss/functions"; // 必要的方法
+// @import "~bootstrap/scss/mixins";
+// @import "~bootstrap/scss/bootstrap"; // Bootstrap 完整原始碼
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
+// 自訂需載入的元件
+//引入部份插件的位置：node_modules/bootstrap/scss/vendor
+@import '~bootstrap/scss/alert';
+// @import '~bootstrap/scss/buttons';
