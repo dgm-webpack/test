@@ -7,6 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin'); //清空dist資�
 const HtmlWebpackPlugin = require('html-webpack-plugin') //引用資源，輸入及要輸出的檔名
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const glob = require('glob');
+// const alias = require('rollup-plugin-alias')
 const obj = [
     {   //brands (一次性，不壓縮)
         js_main: './src/brands/js/main2.js',
@@ -23,9 +24,9 @@ const obj = [
         img: './src/brita/caseName/images',//輸出的檔案or資料夾名稱(依當時時專案改名)
         img_publicPath: '../images/',
         img_outputPath: 'images',
-        css_outputPath: 'images/[name].css',
+        css_outputPath: 'images/[name].css?v=[hash]',
         html_template: './src/brita/caseName/index.html', //輸出的檔案or資料夾名稱(依當時時專案改名)
-        html_filename: 'index.html',
+        html_filename: 'code/index.html',
         minimize: true
     },
     {   //order
@@ -33,9 +34,9 @@ const obj = [
         img: './src/order/caseName/images',//輸出的檔案or資料夾名稱(依當時時專案改名)
         img_publicPath: '../images/',
         img_outputPath: 'images',
-        css_outputPath: 'images/[name].css',
+        css_outputPath: 'images/[name].css?v=[hash]',
         html_template: './src/order/caseName/index.html', //輸出的檔案or資料夾名稱(依當時時專案改名)
-        html_filename: 'index.html',
+        html_filename: 'code/index.html',
         minimize: true
     },
 ]
@@ -60,7 +61,7 @@ var config = {
     entry: obj[1].js_main, //進入點，引入各種類的檔案，包括圖片或css  //obj[1].js_main
     output: { //輸出
         path: path.resolve(__dirname, 'dist'),
-        filename: 'js/[name].[hash].js',
+        filename: 'js/[name].js?v=[hash]',
         // publicPath: '../dist/'
     },
     devServer: {
@@ -76,6 +77,7 @@ var config = {
             '@img': path.resolve(obj[1].img), //*** */
             '@src': path.resolve(__dirname, 'src/act02/js'),
             '@demoImg': path.resolve(__dirname, 'assets/icon'),
+            '@fortawesome': '/node_modules/@fortawesome/fontawesome-free/webfonts'
         },
     },
     module: {
@@ -137,6 +139,9 @@ var config = {
         ]
     },
     plugins: [
+        // alias({
+        //     '@fortawesome/fontawesome-free-solid': 'node_modules/@fortawesome/fontawesome-free-solid/shakable.es.js'
+        //   }),
         new CleanWebpackPlugin(),//清空dist資料夾
 
         new MiniCssExtractPlugin({
@@ -186,7 +191,7 @@ var config = {
             //  有關更多資訊，請參見“定義”一節。
             defaultSizes: "parsed",
             //  在預設瀏覽器中自動開啟報告
-            openAnalyzer: true,
+            openAnalyzer: false,
             //  如果為true，則Webpack Stats JSON檔案將在bundle輸出目錄中生成
             generateStatsFile: true,
             //  如果`generateStatsFile`為`true`，將會生成Webpack Stats JSON檔案的名字。

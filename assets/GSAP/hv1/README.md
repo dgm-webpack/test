@@ -3,8 +3,5 @@
 //need help learning GSAP? 
 //check out my courses: https://www.creativeCodingClub.com
 
-
-
-
-import '../../../../assets/GSAP/banner1/main.scss';
-import '../../../../assets/GSAP/banner1/main.js';
+有使用真棒字體
+<script src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
