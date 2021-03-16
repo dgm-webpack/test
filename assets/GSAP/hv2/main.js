@@ -1,7 +1,7 @@
 // import { gsap } from "gsap";
 // import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-
+GSDevTools.create();
 document.addEventListener("DOMContentLoaded", function() {
   
   gsap.utils.toArray(".container_gsapCard .inner").forEach(function(elem) {

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>固定長條型hv展示</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="main.min.css">
+    <style>
+        img {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body class="">
+    <div class="wrapper" id='digim'>
+        <div class="video-swiper-wrapper">
+            <div class="swiper-container swiper-youtube-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="video-container" data-id="reOFedz1URc">
+                            <div class="video-iframe"></div>
+                            <div class="video-play"></div>
+                        </div>
+                        <p class='title'>MAXTRA+ 雙濾芯全新上市 電視廣告</p>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="video-container" data-id="LKh2GpXez9M">
+                            <div class="video-iframe"></div>
+                            <div class="video-play"></div>
+                        </div>
+                        <p class='title'>MAXTRA+ 濾芯-全效型 實驗影片</p>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="video-container" data-id="hjCexDMgMPE">
+                            <div class="video-iframe"></div>
+                            <div class="video-play"></div>
+                        </div>
+                        <p class='title'>MAXTRA+ 濾芯-去水垢專家 實驗影片</p>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="img-container" >
+                            <img src="sec01.jpg" alt="">
+                        </div>
+                        
+                        <p class='title'>MAXTRA+ 濾芯-去水垢專家 實驗影片</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="swiper-button-prev"> prev </div>
+            <div class="swiper-button-next"> next </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+
+
+
+    <!-- swiper6 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.js"> </script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"> </script>
+    <!-- <script src="main.js"></script> -->
+    <script>
+        // window.dataLayer = window.dataLayer || [];
+        // function ptag() { dataLayer.push(arguments); }
+        // ptag({ 'paid': '1568258659953' });
+        // ptag('event', 'tracking', {
+        //     'tracking_id': 'TAC20190912000000001'
+        // });   
+    </script>
+
+    <script>
+        var ytplayer
+        jQuery(function ($) {
+
+            if ($('.video-swiper-wrapper').length > 0) {
+                var tag = document.createElement('script');
+                tag.src = "https://www.youtube.com/iframe_api";
+                var firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            }
+
+            var initPlayer = function (element) {
+                var player = element.querySelector('.video-iframe');
+                var button = element.querySelector('.video-play');
+                if (player) {
+                    console.log("video")
+                    ytplayer = new YT.Player(player, {
+                        playerVars: {
+                            'mute': 1,
+                            'autoplay': 1,
+                            'modestbranding': 1,
+                            'controls': 1,
+                            'rel': 0,
+                        },
+                        videoId: element.dataset.id,
+                        events: {
+                            'onStateChange': onPlayerStateChange, //當播放器狀態改變時執行
+                        }
+                    });
+                }else{
+                    console.log("img")
+                }
+
+            };
+            window.onYouTubePlayerAPIReady = function () {
+                var container = document.querySelectorAll('.swiper-slide');
+                for (var i = 0; i < container.length; i++) {
+                    initPlayer(container[i])
+                }
+            };
+            var titles = ['Page 1', 'Page 2', 'Page 3'];
+            var swiper_youtube = new Swiper('.swiper-youtube-container', {
+                loop: true,  // 循環
+                init: true,
+                //autoplay : true, //自動播放
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: 'bullets',
+                    clickable: true,
+                },
+                lazy: {
+                    loadPrevNext: true,
+                },
+                paginationBulletRender: function (index, className) {
+                    return '<span class="' + className + '">' + titles[index] + '</span>';
+                },
+                on: {
+                    init: function (swiper) {
+                        //Swiper初始化了
+                        //alert('当前的slide序号是' + this.activeIndex);//或者swiper.activeIndex，swiper与this都可指代当前swiper实例
+                        //this.emit('transitionEnd');//在初始化时触发一次transitionEnd事件，需要先设置transitionEnd
+                    },
+                }
+            }).on('slideChange', function () {
+                let isVideo1 = document.querySelector('.swiper-slide').children[0]
+                console.log(isVideo1)
+                var isVideo = swiper_youtube.slides[swiper_youtube.previousIndex].querySelector('.video-container');
+                console.log(isVideo)
+                if (isVideo) {
+                    YT.get(isVideo.querySelector('iframe').id).stopVideo();
+                    console.log(isVideo.querySelector('iframe').id);
+                }
+            });
+
+
+
+
+            function onPlayerStateChange(event) {
+                
+                var isVideo = swiper_youtube.slides[swiper_youtube.activeIndex].querySelector('.video-container');
+                
+                if (event.data === 0) {
+                    swiper_youtube.slideNext();
+                }
+            }
+
+            if ($('.video-swiper-wrapper .swiper-slide').length < 2) {
+                $('.video-ctrl').hide();
+            }
+
+
+
+        });
+    </script>
+
+</body>
+
+</html>
