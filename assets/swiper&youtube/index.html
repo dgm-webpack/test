@@ -50,6 +50,9 @@
             <div class="swiper-pagination"></div>
         </div>
     </div>
+    <button id="mute-toggle">聲音開關</button>
+
+    <div class="ans"></div>
 
 
 
@@ -70,7 +73,7 @@
     </script>
 
     <script>
-        var ytplayer, isMute
+        var ytplayer, isMute = true
 
         jQuery(function ($) {
 
@@ -159,20 +162,51 @@
                 }
                 if (isVideo_activeIndex.children[0].dataset.type == "video") {
                     var isVideo = swiper_youtube.slides[swiper_youtube.activeIndex].querySelector('.video-container');
+
                     if (isVideo) {
-                        
-                        if (YT.get(isVideo_activeIndex.querySelector('iframe').id).isMuted()) {
+
+                        if (isMute) {
                             YT.get(isVideo_activeIndex.querySelector('iframe').id).mute();
+                            document.querySelector(".ans").textContent = isMute
+
                         }
                         else {
+                          
                             YT.get(isVideo_activeIndex.querySelector('iframe').id).unMute();
-                        }
+                            //sconsole.log('不靜音')
+                            document.querySelector(".ans").textContent = isMute
 
+                        }
                         YT.get(isVideo_activeIndex.querySelector('iframe').id).playVideo();
+
                         // console.log(isVideo.querySelector('iframe').id);
                     }
                 }
             });
+
+            document.querySelector("#mute-toggle").addEventListener('click', function () {
+                //alert('hi')
+                isMute = !isMute
+                var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex].querySelector('.video-container');
+                //YT.get(isVideo_activeIndex.querySelector('iframe').id).stopVideo();
+                    document.querySelector(".ans").textContent = isMute
+
+                    if (isMute) {
+                        YT.get(isVideo_activeIndex.querySelector('iframe').id).mute();
+                        document.querySelector(".ans").textContent = isMute
+
+                    }
+                    else {
+
+                        YT.get(isVideo_activeIndex.querySelector('iframe').id).unMute();
+                        //sconsole.log('不靜音')
+                        document.querySelector(".ans").textContent = isMute
+
+                    }
+            })
+
+
+
 
 
 
@@ -186,9 +220,11 @@
                     //         YT.get(isVideo_activeIndex.querySelector('iframe').id).stopVideo();
                     //         // console.log(isVideo.querySelector('iframe').id);
                     //     }
-                    swiper_youtube.slideNext(isMute);
+                    swiper_youtube.slideNext();
 
-                } else { return }
+                } else if (event.data == 1) {
+                    
+                }
 
             }
 
