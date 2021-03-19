@@ -25,6 +25,9 @@ body {
         margin-top: 8.8%;
         left: 0%;
         overflow: hidden;
+        img {
+            width: 100%;
+        }
         iframe,
         .title {
             //width: 100%;
@@ -52,8 +55,17 @@ body {
                 font-size: 3vw;
             }
         }
+        
     }
-
+    .video-play{
+        // position: absolute;
+        // z-index: 1;
+        // top: 0;
+        // left: 0;
+        // bottom: 0;
+        // right: 0;
+        // background-color: rgba(0,0,0,0.5);
+    }
     .swiper-button-prev,
     .swiper-button-next {
         position: absolute;

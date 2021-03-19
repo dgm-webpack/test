@@ -171,7 +171,7 @@ var config = {
         new webpack.ProvidePlugin({
             // $: 'jquery',
             //jQuery: 'jquery'//這邊以上是新增
-            $: 'jquery/dist/jquery.slim.min.js' //輕量版，完整路徑node_modules/jquery/dist/jquery.js
+            //$: 'jquery/dist/jquery.slim.min.js' //輕量版，完整路徑node_modules/jquery/dist/jquery.js
         }),
         new BundleAnalyzerPlugin({
             //  可以是`server`，`static`或`disabled`。
