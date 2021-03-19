@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用自訂義按鈕播放清單</title>
+    <style>
+        .buttons {
+            position: relative;
+            margin: 0 auto 20px auto;
+            padding: 20px;
+            float: left;
+            display: block;
+            background-color: #eee;
+            border-radius: 4px;
+        }
+
+        .buttons:after {
+            top: 100%;
+            left: 50%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-color: rgba(238, 238, 238, 0);
+            border-top-color: #eee;
+            border-width: 10px;
+            margin-left: -10px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            outline: none;
+            cursor: pointer;
+            color: white;
+            background-color: #7F8C8D;
+            border: none;
+            border-radius: 4px;
+        }
+
+        #play-button {
+            background-color: #2ECC71;
+        }
+
+        #play-button:hover {
+            background-color: #27AE60;
+        }
+
+        #pause-button {
+            background-color: #E67E22;
+        }
+
+        #pause-button:hover {
+            background-color: #D35400;
+        }
+
+        #stop-button {
+            background-color: #E74C3C;
+        }
+
+        #stop-button:hover {
+            background-color: #C0392B;
+        }
+
+        #pause-button,
+        #stop-button {
+            margin-left: 15px;
+        }
+
+        iframe {
+            margin: 0 auto;
+            width: 560px;
+            height: 315px;
+            float: left;
+            clear: both;
+            display: block;
+            background-color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="player"></div>
+    <div class="buttons">
+        <button class="button" id="play-button">PLAY</button>
+        <button class="button" id="pause-button">PAUSE</button>
+
+        <button class="button" id="previous">previous</button>
+        <button class="button" id="next">Next</button>
+        <button class="button" id="stop-button">STOP</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+
+
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var videoIDs = [
+            'reOFedz1URc',
+            'LKh2GpXez9M',
+            'nfs8NYg7yQM',
+            'ClU3fctbGls'
+        ];
+
+        var player, currentVideoId = 0;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '390',
+                width: '640',
+                playerVars: {
+                    controls: 1,
+                    showinfo: 0,
+                    rel: 0,
+                    showsearch: 0,
+                    iv_load_policy: 3
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.loadVideoById(videoIDs[currentVideoId]);
+
+            // bind events
+            var playButton = document.getElementById("play-button");
+            playButton.addEventListener("click", function () {
+                player.playVideo();
+            });
+
+            var pauseButton = document.getElementById("pause-button");
+            pauseButton.addEventListener("click", function () {
+                player.pauseVideo();
+            });
+
+            var stopButton = document.getElementById("stop-button");
+            stopButton.addEventListener("click", function () {
+                player.stopVideo();
+            });
+            var next = document.getElementById("next");
+            next.addEventListener("click", function () {
+                player.nextVideo();
+            });
+
+            var pre = document.getElementById("previous");
+            pre.addEventListener("click", function () {
+                player.previousVideo();
+            });
+
+            player.loadPlaylist({
+                playlist: videoIDs
+            });
+
+
+
+        }
+
+        function onPlayerStateChange(event) {
+            console.log(event.data)
+            if (event.data == YT.PlayerState.ENDED) {
+                //currentVideoId++;
+                //player.nextVideo()
+                // if (currentVideoId < videoIDs.length) {
+                //     player.loadVideoById(videoIDs[currentVideoId]);
+            }
+            else if (event.data === -1) {
+                //顯示預覽圖片
+                // alert('無法播放')
+
+            }
+        }
+    </script>
+</body>
+
+</html>

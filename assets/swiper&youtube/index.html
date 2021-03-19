@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>固定長條型hv展示</title>
+    <title>使用swiper輪播影片及img</title>
 
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
@@ -20,6 +20,7 @@
     <div class="wrapper" id='digim'>
         <div class="video-swiper-wrapper">
             <div class="swiper-container swiper-youtube-container">
+                <div id="mute-toggle"></div>
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="video-container" data-id="reOFedz1URc" data-type="video">
@@ -42,15 +43,18 @@
 
                         <p class='title'>MAXTRA+ 濾芯-去水垢專家 實驗影片</p>
                     </div>
+                    
                 </div>
 
             </div>
             <div class="swiper-button-prev"> prev </div>
             <div class="swiper-button-next"> next </div>
             <div class="swiper-pagination"></div>
+            
         </div>
+        
     </div>
-    <button id="mute-toggle">聲音開關</button>
+    
 
     <div class="ans"></div>
 
@@ -73,22 +77,22 @@
     </script>
 
     <script>
-        var ytplayer, isMute = true
+        var ytplayer, isMute = true,timeID
 
-        jQuery(function ($) {
+        // jQuery(function ($) {
 
-            if ($('.video-swiper-wrapper').length > 0) {
+            // if ($('.video-swiper-wrapper').length > 0) {
                 var tag = document.createElement('script');
                 tag.src = "https://www.youtube.com/iframe_api";
                 var firstScriptTag = document.getElementsByTagName('script')[0];
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-            }
+            // }
 
             var initPlayer = function (element) {
                 var player = element.querySelector('.video-iframe');
                 var button = element.querySelector('.video-play');
                 if (player) {
-                    console.log("video")
+                    //console.log("video")
                     ytplayer = new YT.Player(player, {
                         playerVars: {
                             'mute': 1,
@@ -96,14 +100,17 @@
                             'modestbranding': 1,
                             'controls': 1,
                             'rel': 0,
+                            'autohide': 0
                         },
                         videoId: element.dataset.id,
                         events: {
                             'onStateChange': onPlayerStateChange, //當播放器狀態改變時執行
+                            //'onPlaybackMuteChange' : dddd
                         }
                     });
                 } else {
                     console.log("img")
+                    
                 }
 
             };
@@ -113,10 +120,15 @@
                     initPlayer(container[i])
                 }
             };
+
+
+            
             var titles = ['Page 1', 'Page 2', 'Page 3'];
             var swiper_youtube = new Swiper('.swiper-youtube-container', {
                 loop: true,  // 循環
                 init: true,
+                slidesPerView : 1, 
+                slidesPerGroup : 1, 
                 //autoplay : true, //自動播放
                 navigation: {
                     nextEl: '.swiper-button-next',
@@ -143,8 +155,7 @@
             }).on('slideChange', function () {
                 let isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
                 let isVideo_previousIndex = swiper_youtube.slides[swiper_youtube.previousIndex]
-
-
+                window.clearTimeout(timeID);
                 //console.log(isVideo_activeIndex.children[0].dataset.type)
                 if (isVideo_previousIndex.children[0].dataset.type == "video") {
 
@@ -155,16 +166,18 @@
                     }
                 }
                 if (isVideo_activeIndex.children[0].dataset.type == "img") {
-                    setTimeout(function () {
+                    document.querySelector("#mute-toggle").style.display = "none"
+                    timeID = window.setTimeout(function () {
+                        console.log('圖片5秒換下')
                         swiper_youtube.slideNext();
                     }, 5000)
                     return
                 }
                 if (isVideo_activeIndex.children[0].dataset.type == "video") {
                     var isVideo = swiper_youtube.slides[swiper_youtube.activeIndex].querySelector('.video-container');
-
+                    document.querySelector("#mute-toggle").style.display = "block"
                     if (isVideo) {
-
+                        console.log(isVideo_activeIndex.querySelector('iframe').id)
                         if (isMute) {
                             YT.get(isVideo_activeIndex.querySelector('iframe').id).mute();
                             document.querySelector(".ans").textContent = isMute
@@ -185,7 +198,7 @@
             });
 
             document.querySelector("#mute-toggle").addEventListener('click', function () {
-                //alert('hi')
+                //console.log(!!ytplayer.isMuted())
                 isMute = !isMute
                 var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex].querySelector('.video-container');
                 //YT.get(isVideo_activeIndex.querySelector('iframe').id).stopVideo();
@@ -206,23 +219,21 @@
             })
 
 
-
-
-
-
+            function dddd(){
+                alert('hi')
+            }
 
             function onPlayerStateChange(event) {
                 // let isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
                 // var isVideo = swiper_youtube.slides[swiper_youtube.activeIndex].querySelector('.video-container');
                 console.log(event.data)
-                if (event.data == 0) {
-                    // if (isVideo) {
-                    //         YT.get(isVideo_activeIndex.querySelector('iframe').id).stopVideo();
-                    //         // console.log(isVideo.querySelector('iframe').id);
-                    //     }
-                    swiper_youtube.slideNext();
+                if (event.data === 0) {
 
-                } else if (event.data == 1) {
+                    console.log('播完換下一部')
+                    swiper_youtube.slideNext();
+                    
+
+                } else if (event.data === 1) {
                     
                 }
 
@@ -234,7 +245,7 @@
 
 
 
-        });
+        // });
     </script>
 
 </body>
