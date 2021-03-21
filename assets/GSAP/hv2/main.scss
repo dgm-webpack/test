@@ -1,0 +1,218 @@
+$screen_pc: 899px; //換成變動單位
+$screen_tb: 768px; //行動裝置：換圖，行動版字尺寸_tab
+$screen_mo: 550px; //行動裝置：換圖，行動版字尺寸_mo
+$screen_mm: 350px; //小螢幕手機微調
+
+//動作
+$active_txt_row: translateX(-20%) scale(0);
+$active_txt_col: translateY(110%);
+
+html,
+body {
+    margin: 0;
+}
+* {
+    box-sizing: border-box;
+}
+#digim.wrapper {
+    max-width: 1960px;
+    width: 100%;
+    overflow-x: hidden;
+    .order {
+        width: 100%;
+        height: auto;
+        color: #000;
+        display: block;
+        position: relative;
+        background-color: #fff;
+        z-index: 99;
+        div {
+            height: 400px;
+            border: 1px solid;
+        }
+    }
+    .container_gsapCard {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 50vh;
+        color: white;
+        text-align: center;
+        .inner {
+            display: flex;
+            position: relative;
+            width: 100vw;
+            height: 100%;
+            max-height: 100vh;
+            .inner_img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .inner_txt {
+                --padding: 1% 5%;
+                --duration: 400ms;
+                --delay: calc(var(--duration) / 2);
+                --ease: cubic-bezier(0.25, 1, 0.5, 1);
+                position: absolute;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                flex-wrap: wrap;
+                overflow: hidden;
+                div {
+                    flex: 0 0 100%;
+                    h1 {
+                        position: relative;
+                        width: 100%;
+                        display: block;
+                        font-size: 5vmin;
+                        margin-top: calc(var(--padding) * -1);
+                        padding: var(--padding);
+                        padding-bottom: 0;
+                        margin: 0%;
+                        @media only screen and (max-width: $screen_pc) {
+                            font-size: 5vw;
+                        }
+                    }
+                    .hiddenLine {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        div {
+                            margin: 2% 0%;
+                            flex: 0 0 40%;
+                            height: 1vmin;
+                            background-color: white;
+                            transform: scaleX(0);
+                            transition: transform var(--duration) var(--delay) var(--ease);
+                        }
+                    }
+                    .mainTxt {
+                        overflow: hidden;
+                        text-align: justify;
+                        padding: 0 5%;
+                        height: atuto;
+                        // display: block;
+                        div {
+                            // transform: $active_txt_col;
+                            transition: transform var(--duration) var(--delay) var(--ease);
+                            position: relaative;
+                            font-size: 1.7vmin;
+                            width: 100%;
+                            max-width: 100%;
+                        }
+                    }
+                    .button{
+                        display: flex;
+                        justify-content: flex-start;
+                        button{
+                            margin-top: 2%;
+                            padding: 0.5% 2%;
+                            font-size: 1.5vmin;
+                            border-radius: 5%;
+                            border: 0px;
+                            box-shadow: 1px 1px 3px 3px rgba(102, 102, 102,0.2);
+                            cursor: pointer;
+                            &:hover{
+                                filter: grayscale(80%);
+                                box-shadow: 1px 1px 3px 3px rgba(102, 102, 102,0.5);
+                            }
+                        }
+                        
+                    }
+                    
+                }
+            }
+        }
+        & .inner.inner_center div {
+            h1 {
+                text-align: center;
+                padding: 0 25%;
+            }
+            .hiddenLine {
+                justify-content: center;
+                padding-right: 0%;
+            }
+            .mainTxt {
+                text-align: justify;
+                padding: 0 25%;
+            }
+            .button{
+                justify-content: center;
+            }
+        }
+        & .inner.inner_right div {
+            h1 {
+                text-align: left;
+                padding-left: 50%;
+            }
+            .hiddenLine {
+                justify-content: flex-end;
+                padding-right: 17%;
+            }
+            .mainTxt {
+                text-align: left;
+                padding-left: 50%;
+            }
+            .button{
+                padding-left: 50%;
+            }
+        }
+
+        & .inner.inner_left div {
+            h1 {
+                text-align: left;
+                padding-right: 50%;
+            }
+            .hiddenLine {
+                justify-content: flex-start;
+                padding-left: 5%;
+            }
+            .mainTxt {
+                text-align: left;
+                padding-right: 50%;
+            }
+            .button{
+                justify-content: flex-start;
+                padding-left: 5%;
+            }
+        }
+        & .inner.inner_between div {
+            h1 {
+                text-align: left;
+                padding-left: 5%;
+            }
+            .hiddenLine {
+                justify-content: flex-start;
+                padding-left: 5%;
+            }
+            .mainTxt {
+                text-align: left;
+                padding-left: 50%;
+            }
+            .button{
+                padding-left: 50%;
+                justify-content: flex-start;
+            }
+        }
+    }
+
+    .container_gsapCard .inner.active .inner_txt {
+        // .mainTxt div {
+        //     transform: translateY(0%) translateX(0%) scale(1);
+        //     transition-delay: 0s;
+        // }
+        .hiddenLine div {
+            transform: scaleX(1);
+            transition-delay: 0s;
+        }
+    }
+}

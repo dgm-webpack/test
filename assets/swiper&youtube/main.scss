@@ -1,0 +1,145 @@
+$screen_pc: 899px; //換成變動單位
+$screen_tb: 768px; //行動裝置：換圖，行動版字尺寸_tab
+$screen_mo: 550px; //行動裝置：換圖，行動版字尺寸_mo
+$screen_mm: 350px; //小螢幕手機微調
+
+html,
+body {
+    margin: 0;
+}
+* {
+    box-sizing: border-box;
+}
+#digim.wrapper {
+    max-width: 1960px;
+    width: 100%;
+    overflow-x: hidden;
+
+    .swiper-container {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1240px;
+        // max-height: 406px;
+        // height: 45vw;
+        margin-top: 8.8%;
+        left: 0%;
+        overflow: hidden;
+        img {
+            width: 100%;
+        }
+        iframe,
+        .title {
+            //width: 100%;
+        }
+        .swiper-slide,
+        iframe {
+            max-width: 1240px;
+            width: 100%;
+            max-height: 600px;
+            height: 62vw;
+            //     max-height: 365px;
+            //     height: 50vw;
+            //     position: relative;
+            //     @media screen and (max-width: 767px) {
+            //         height: 38vw;
+            //     }
+        }
+        .title {
+            position: absolute;
+            top: 88%;
+            text-align: center;
+            font-size: 100%;
+            @media screen and (max-width: 767px) {
+                top: 83%;
+                font-size: 3vw;
+            }
+        }
+        
+    }
+    .video-play{
+        // position: absolute;
+        // z-index: 1;
+        // top: 0;
+        // left: 0;
+        // bottom: 0;
+        // right: 0;
+        // background-color: rgba(0,0,0,0.5);
+    }
+    .swiper-button-prev,
+    .swiper-button-next {
+        position: absolute;
+        z-index: 1;
+        // transform: translateY(-50%);
+        top: 50%;
+        max-width: 55px;
+        max-height: 88px;
+        width: 5vw;
+        height: 8vw;
+        display: block;
+        text-indent: -999999px;
+        background-size: cover !important;
+    }
+    .swiper-button-prev {
+        background: url(prev.png) no-repeat;
+    }
+    .swiper-button-next {
+        background: url(next.png) no-repeat;
+    }
+
+    .swiper-pagination {
+        //小點點
+        position: relative;
+        z-index: 1;
+        margin-top: 5%;
+        .swiper-pagination-bullet {
+            max-width: 20px;
+            max-height: 20px;
+            width: 4vw;
+            height: 4vw;
+            margin: 5px 11px;
+            opacity: 1;
+            background-color: #545454;
+        }
+        .swiper-pagination-bullet-active,
+        .swiper-pagination-bullet:hover {
+            background-color: #0188f2;
+        }
+        .swiper-pagination-bullet:hover {
+            opacity: 0.5;
+        }
+    }
+    #mute-toggle {
+        position: absolute;
+        top: 93%;
+        // left: 5.5%;
+        left: 7%;
+        transform: translateX(-50%);
+        z-index: 999;
+        width: 4%;
+        height: 7%;
+        //border: 1px solid red;
+        display: block;
+        cursor: pointer;
+        @media screen and (max-width: 899px) {
+            top: 91%;
+            left: 10%;
+            width: 5%;
+            height: 8%;
+        }
+        @media screen and (max-width: 767px) {
+            top: 88%;
+            // left: 12%;
+            left: 12%;
+            width: 8%;
+            height: 10%;
+        }
+        @media screen and (max-width: 639px) {
+            top: 88%;
+            // left: 12%;
+            left: 15%;
+            width: 8%;
+            height: 10%;
+        }
+    }
+}
