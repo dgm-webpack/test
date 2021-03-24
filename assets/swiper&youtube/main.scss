@@ -55,9 +55,8 @@ body {
                 font-size: 3vw;
             }
         }
-        
     }
-    .video-play{
+    .video-play {
         // position: absolute;
         // z-index: 1;
         // top: 0;
@@ -70,7 +69,7 @@ body {
     .swiper-button-next {
         position: absolute;
         z-index: 1;
-        // transform: translateY(-50%);
+        transform: translateY(-50%);
         top: 50%;
         max-width: 55px;
         max-height: 88px;
@@ -109,37 +108,83 @@ body {
             opacity: 0.5;
         }
     }
-    #mute-toggle {
-        position: absolute;
-        top: 93%;
-        // left: 5.5%;
-        left: 7%;
-        transform: translateX(-50%);
-        z-index: 999;
-        width: 4%;
-        height: 7%;
-        //border: 1px solid red;
-        display: block;
-        cursor: pointer;
-        @media screen and (max-width: 899px) {
-            top: 91%;
-            left: 10%;
-            width: 5%;
-            height: 8%;
+    .youtubeTool {
+        position: relative;
+        border: 1px solid red;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: flex-start;
+        #progress {
+            flex: 0 0 100%;
+            // z-index: 99;
+            cursor: pointer;
+            // position: fixed;
         }
-        @media screen and (max-width: 767px) {
-            top: 88%;
-            // left: 12%;
-            left: 12%;
-            width: 8%;
-            height: 10%;
+        .progressTxt {
+            position: relative;
+            width: auto;
+            height: 30px;
+            flex: 0 0 auto;
+            padding-top: 0.4em;
         }
-        @media screen and (max-width: 639px) {
-            top: 88%;
-            // left: 12%;
-            left: 15%;
-            width: 8%;
-            height: 10%;
+        #mute-toggle,
+        #playBtn,
+        #pauseBtn {
+            width: 10%;
+            max-width: 45px;
+            height: 30px;
+            flex: 0 0 auto;
+            border: 1px solid red;
+            text-align: center;
+            padding: 0 1%;
+            cursor: pointer;
+            z-index: 99;
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .swiper-pagination {
+            width: 100%;
+            height: 30px;
+            flex: 0 0 auto;
+            margin-top: -2%;
+            align-self: center;
         }
     }
+
+    // #mute-toggle {
+    //     position: absolute;
+    //     top: 93%;
+    //     // left: 5.5%;
+    //     left: 7%;
+    //     transform: translateX(-50%);
+    //     z-index: 999;
+    //     width: 4%;
+    //     height: 7%;
+    //     border: 1px solid red;
+    //     display: block;
+    //     cursor: pointer;
+    //     @media screen and (max-width: 899px) {
+    //         top: 91%;
+    //         left: 10%;
+    //         width: 5%;
+    //         height: 8%;
+    //     }
+    //     @media screen and (max-width: 767px) {
+    //         top: 88%;
+    //         // left: 12%;
+    //         left: 12%;
+    //         width: 8%;
+    //         height: 10%;
+    //     }
+    //     @media screen and (max-width: 639px) {
+    //         top: 88%;
+    //         // left: 12%;
+    //         left: 15%;
+    //         width: 8%;
+    //         height: 10%;
+    //     }
+    // }
 }
