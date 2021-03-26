@@ -74,20 +74,70 @@
         }
 
         iframe {
-            margin: 0 auto;
-            width: 560px;
+            margin: 0 auto 20px auto;
+            width: 100%;
             height: 315px;
             float: left;
             clear: both;
             display: block;
             background-color: #eee;
         }
+
+
+
+
+        .progressTxt {
+            margin: 5px;
+        }
+
+
+        input[type="range"] {
+            width: 100%;
+            height: 5px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            background: #edc;
+            /* overflow: hidden; */
+            outline: none;
+            transition: background 450ms ease-in;
+            /* 避免點選會有藍線或虛線 */
+        }
+
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            position: relative;
+            width: 15px;
+            height: 15px;
+            background: #f22;
+            border-radius: 50%;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: #f22;
+            border: none;
+            border-radius: 50%;
+            left: 0;
+            transform: translateX(-50%);
+        }
+
+        input[type="range"]::-moz-range-track {
+            transform: translateX(-50%);
+        }
     </style>
 </head>
 
 <body>
-    <div id="player"></div>
     <div class="buttons">
+        <div id="player"></div>
+        <input id="progress" type="range" min="0" max="0" value="0" />
+        <div class="progressTxt">
+            <span id="palyingTime">00:00</span>
+            <span>/</span>
+            <span id="totalTime">00:00</span>
+        </div>
         <button class="button" id="play-button">PLAY</button>
         <button class="button" id="pause-button">PAUSE</button>
 
@@ -99,28 +149,24 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
-
-
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         var videoIDs = [
-            'reOFedz1URc',
-            'LKh2GpXez9M',
-            'nfs8NYg7yQM',
-            'ClU3fctbGls'
+            '1ZovKZwNhwk',
+            'ClU3fctbGls',
         ];
 
-        var player, currentVideoId = 0;
+        var t, player;
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
                 height: '390',
                 width: '640',
                 playerVars: {
-                    controls: 1,
+                    controls: 0,
                     showinfo: 0,
                     rel: 0,
                     showsearch: 0,
@@ -135,30 +181,35 @@
         }
 
         function onPlayerReady(event) {
-            event.target.loadVideoById(videoIDs[currentVideoId]);
-
             // bind events
             var playButton = document.getElementById("play-button");
             playButton.addEventListener("click", function () {
+                window.clearTimeout(t);
                 player.playVideo();
             });
 
             var pauseButton = document.getElementById("pause-button");
             pauseButton.addEventListener("click", function () {
+                window.clearTimeout(t);
                 player.pauseVideo();
             });
 
             var stopButton = document.getElementById("stop-button");
             stopButton.addEventListener("click", function () {
+                window.clearTimeout(t);
                 player.stopVideo();
+                let totalTime = document.getElementById("progress").max
+                showVideoTime("0","0",0,totalTime);
             });
             var next = document.getElementById("next");
             next.addEventListener("click", function () {
+                window.clearTimeout(t);
                 player.nextVideo();
             });
 
             var pre = document.getElementById("previous");
             pre.addEventListener("click", function () {
+                window.clearTimeout(t);
                 player.previousVideo();
             });
 
@@ -166,24 +217,78 @@
                 playlist: videoIDs
             });
 
+            document.querySelector("#progress").addEventListener('change', function (e) {
+                //window.clearTimeout(t);
+                let seekToValue = e.target.value
+                let totalTime = document.getElementById("progress").max
+                let Cal_Minute = Math.floor(Math.floor(seekToValue % 3600) / 60)
+                let Cal_Second = Math.floor(seekToValue % 60);
 
-
+                showVideoTime(Cal_Minute,Cal_Second,seekToValue,totalTime);
+                player.pauseVideo();
+                player.seekTo(seekToValue, true)
+                player.playVideo();
+            })
         }
 
         function onPlayerStateChange(event) {
-            console.log(event.data)
-            if (event.data == YT.PlayerState.ENDED) {
-                //currentVideoId++;
-                //player.nextVideo()
-                // if (currentVideoId < videoIDs.length) {
-                //     player.loadVideoById(videoIDs[currentVideoId]);
-            }
-            else if (event.data === -1) {
-                //顯示預覽圖片
-                // alert('無法播放')
+            //console.log('清除', t)
+            window.clearTimeout(t);
+            let totalTime = player.getDuration(),
+                    Total_Minute = Math.floor(Math.floor(totalTime % 3600) / 60),
+                    Total_Second = Math.floor(totalTime % 60);
+                document.querySelector('#progress').setAttribute('max', totalTime)
+                document.querySelector('#totalTime').textContent = Total_Minute + ":" + Total_Second
 
+            if (event.data === 0) {
+                setTimeout(function () {
+                    showVideoTime("0","0",0,100);
+            }, 1000)
+                //console.log("影片" + event.target.h.id + "播完換下一部")
+            }
+            if (event.data === 1) {
+                console.log('播放')
+                let totalTime = parseInt(player.getDuration())
+                isTime(totalTime)
+            }
+            if (event.data === 2) {
+                //console.log('暫停')
+            }
+            if (event.data === null) {
+                //一開始初始youtube時，如果沒回傳結果才會執行(在移動裝置時使用)。codpen會失靈
+                //player.playVideo();
             }
         }
+
+        function isTime(totalTime) {
+            //console.log('還有t嗎', t)
+            var palyingTime, Cal_Minute, Cal_Second;
+            palyingTime = player.getCurrentTime()
+            Cal_Minute = Math.floor(Math.floor(palyingTime % 3600) / 60)
+            Cal_Second = Math.floor(palyingTime % 60);
+            console.log(totalTime)
+            
+            if (palyingTime <= 1) {
+                Cal_Second = Cal_Second + 1
+            } 
+            
+            showVideoTime(Cal_Minute,Cal_Second,palyingTime,totalTime);
+            t = setTimeout(function () {
+                window.clearTimeout(t);
+                isTime(totalTime)
+            }, 1000);
+        }
+
+        function showVideoTime(Cal_Minute,Cal_Second,palyingTime,totalTime){
+            console.log(Cal_Minute,Cal_Second,palyingTime,totalTime)
+            let percent = (palyingTime / totalTime) * 100
+            document.querySelector('#palyingTime').textContent = Cal_Minute + ":" + Cal_Second
+            document.getElementById("progress").value = palyingTime;
+            document.getElementById("progress").setAttribute("value",palyingTime);
+            document.getElementById("progress").style.background = 'linear-gradient(to right, #f22 0%, #f22 ' + percent + '%, #fff ' + percent + '%, white 100%)'
+        };
+
+
     </script>
 </body>
 

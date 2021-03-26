@@ -3,6 +3,11 @@ $screen_tb: 768px; //行動裝置：換圖，行動版字尺寸_tab
 $screen_mo: 550px; //行動裝置：換圖，行動版字尺寸_mo
 $screen_mm: 350px; //小螢幕手機微調
 
+//color
+$swiperToolBg : rgba(0, 0, 0, 0.2);
+$swiperProgress : rgba(199, 22, 22,0.8);
+$swiperPagination : rgba(255, 255, 255, 0.5);
+$swiperPagination_active : rgba(199, 22, 22,0.8);
 html,
 body {
     margin: 0;
@@ -33,7 +38,8 @@ body {
             //width: 100%;
         }
         .swiper-slide,
-        iframe {
+        iframe,
+        img {
             max-width: 1240px;
             width: 100%;
             max-height: 600px;
@@ -80,10 +86,10 @@ body {
         background-size: cover !important;
     }
     .swiper-button-prev {
-        background: url(prev.png) no-repeat;
+        background-image: url(prev.png) no-repeat;
     }
     .swiper-button-next {
-        background: url(next.png) no-repeat;
+        background-image: url(next.png) no-repeat;
     }
 
     .swiper-pagination {
@@ -98,19 +104,23 @@ body {
             height: 4vw;
             margin: 5px 11px;
             opacity: 1;
-            background-color: #545454;
+            background-color: $swiperPagination;
         }
         .swiper-pagination-bullet-active,
         .swiper-pagination-bullet:hover {
-            background-color: #0188f2;
+            background-color: $swiperPagination_active;
         }
         .swiper-pagination-bullet:hover {
             opacity: 0.5;
         }
     }
     .youtubeTool {
-        position: relative;
-        border: 1px solid red;
+        position: absolute;
+        z-index: 99;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.2);
+        width: 100%;
+        //border: 1px solid red;
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
@@ -135,7 +145,7 @@ body {
             max-width: 45px;
             height: 30px;
             flex: 0 0 auto;
-            border: 1px solid red;
+            //border: 1px solid red;
             text-align: center;
             padding: 0 1%;
             cursor: pointer;
@@ -152,39 +162,42 @@ body {
             margin-top: -2%;
             align-self: center;
         }
-    }
 
-    // #mute-toggle {
-    //     position: absolute;
-    //     top: 93%;
-    //     // left: 5.5%;
-    //     left: 7%;
-    //     transform: translateX(-50%);
-    //     z-index: 999;
-    //     width: 4%;
-    //     height: 7%;
-    //     border: 1px solid red;
-    //     display: block;
-    //     cursor: pointer;
-    //     @media screen and (max-width: 899px) {
-    //         top: 91%;
-    //         left: 10%;
-    //         width: 5%;
-    //         height: 8%;
-    //     }
-    //     @media screen and (max-width: 767px) {
-    //         top: 88%;
-    //         // left: 12%;
-    //         left: 12%;
-    //         width: 8%;
-    //         height: 10%;
-    //     }
-    //     @media screen and (max-width: 639px) {
-    //         top: 88%;
-    //         // left: 12%;
-    //         left: 15%;
-    //         width: 8%;
-    //         height: 10%;
-    //     }
-    // }
+        input[type="range"] {
+            width: 100%;
+            height: 5px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            // background: $swiperToolBg;
+            /* overflow: hidden; */
+            outline: none;
+            transition: background 450ms ease-in;
+            /* 避免點選會有藍線或虛線 */
+        }
+
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            position: relative;
+            width: 15px;
+            height: 15px;
+            background: $swiperProgress ;
+            border-radius: 50%;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: $swiperProgress ;
+            border: none;
+            border-radius: 50%;
+            left: 0;
+            transform: translateX(-50%);
+        }
+
+        input[type="range"]::-moz-range-track {
+            transform: translateX(-50%);
+        }
+
+    }
 }

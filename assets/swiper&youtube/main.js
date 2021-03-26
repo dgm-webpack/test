@@ -1,11 +1,51 @@
+var ytplayer, isMute = true, timeID, t, time, palyingTime, n = 0;
+// 
+let jss = [
+    'https://unpkg.com/swiper/swiper-bundle.min.js',
+    'https://www.youtube.com/iframe_api',
+];
+let csss = [
+    'https://unpkg.com/swiper/swiper-bundle.min.css'
+]
+linkInit()
 
-var ytplayer, isMute = true, timeID, t, time, palyingTime
-// window.onload = function () {
+function linkInit() {
+    //插件加載中顯示的畫面
+    document.querySelector('.video-swiper-wrapper').style.backgroundImage = "url('sec01.jpg')"
+    document.querySelector('.video-swiper-wrapper').style.backgroundSize = "cover"
+    document.querySelector('.youtubeTool').style.visibility = 'hidden'
 
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    for (let i = 0; i < csss.length; i++) {
+        var tag = document.createElement('link');
+        tag.href = csss[n];
+        var firstLinkTag = document.getElementsByTagName('link')[0];
+        firstLinkTag.parentNode.insertBefore(tag, firstLinkTag);
+        tag.setAttribute('rel', 'stylesheet')
+    };
+    srclink()
+    function srclink() {
+        if (n !== jss.length) {
+            var tag = document.createElement('script');
+            tag.src = jss[n];
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            firstScriptTag.onload = function (e) {
+                console.log(e)
+                n = n + 1
+                if (n !== jss.length) {
+                    srclink()
+                }
+                if (n == jss.length) {
+                    init()
+                    document.querySelector('.video-swiper-wrapper').style.background = 'none'
+                    document.querySelector('.youtubeTool').style.visibility = 'visible'
+                }
+            }
+        }
+    }
+}
+
+function init() {
 
     var titles = ['Page 1', 'Page 2', 'Page 3'];
     var swiper_youtube = new Swiper('.swiper-youtube-container', {
@@ -44,6 +84,7 @@ var ytplayer, isMute = true, timeID, t, time, palyingTime
                     }
                 }
 
+
                 var initPlayer = function (element) {
                     var player = element.querySelector('.video-iframe');
                     var button = element.querySelector('.video-play');
@@ -70,12 +111,11 @@ var ytplayer, isMute = true, timeID, t, time, palyingTime
                     } else {
                         //console.log("img")
                     }
-
                 };
-
             },
         }
     }).on('slideChange', function () {
+        let init
         let isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
         let isVideo_previousIndex = swiper_youtube.slides[swiper_youtube.previousIndex]
         //console.log(isVideo_activeIndex.children[0].dataset.type) //檢查是影片還是圖片
@@ -84,35 +124,34 @@ var ytplayer, isMute = true, timeID, t, time, palyingTime
         //播放當前卡，如果是影片則播放；圖片則計時跳轉
         //console.log(isVideo_activeIndex.children[0].dataset.type)
         if (isVideo_activeIndex.children[0].dataset.type == "video") {
-            swiper_youtube.allowTouchMove= false //阻止手指滑動
-            
-            document.querySelector("#mute-toggle").style.display = "block"
-            document.querySelector("#playBtn").style.display = 'none'
-            document.querySelector("#pauseBtn").style.display = 'block'
+            swiper_youtube.allowTouchMove = false //阻止手指滑動          
+            document.querySelector("#mute-toggle").style.visibility = "visible"
+            document.querySelector("#playBtn").style.visibility = 'visible'
+            document.querySelector("#pauseBtn").style.visibility = 'visible'
+            document.querySelector("#progress").style.visibility = 'visible'
+            document.querySelector(".progressTxt").style.visibility = 'visible'
+            togger("#playBtn", "#pauseBtn", init = true)
             if (isMute) {
                 playVideo_mute(isVideo_activeIndex)
             }
             else {
                 stopVideo_unMute(isVideo_activeIndex)
-                
             }
-
             YT.get(isVideo_activeIndex.querySelector('iframe').id).playVideo();
-            // console.log(ytplayer)
-            // console.log(isVideo_activeIndex.querySelector('iframe').id)
-            // console.log(YT.get(isVideo_activeIndex.querySelector('iframe').id).getDuration())
         } else {
-            swiper_youtube.allowTouchMove= true//允許手指滑動
-            console.log(swiper_youtube.allowTouchMove)
-            document.querySelector("#mute-toggle").style.display = "none"
-            document.querySelector("#playBtn").style.display = 'none'
-            document.querySelector("#pauseBtn").style.display = 'none'
+            swiper_youtube.allowTouchMove = true//允許手指滑動
+            //console.log(swiper_youtube.allowTouchMove)
+            document.querySelector("#mute-toggle").style.visibility = "hidden"
+            document.querySelector("#playBtn").style.visibility = 'hidden'
+            document.querySelector("#pauseBtn").style.visibility = 'hidden'
+            document.querySelector("#progress").style.visibility = 'hidden'
+            document.querySelector(".progressTxt").style.visibility = 'hidden'
+
             timeID = window.setTimeout(function () {
-                console.log('圖片5秒換下')
+                //console.log('圖片5秒換下')
                 swiper_youtube.slideNext();
             }, 5000)
         }
-
 
         if (isVideo_previousIndex.children[0].dataset.type == "video") {
             YT.get(isVideo_previousIndex.querySelector('iframe').id).stopVideo();
@@ -122,98 +161,91 @@ var ytplayer, isMute = true, timeID, t, time, palyingTime
         }
     });
 
-    // $('#ytplayer').show(0, function () {
-    //     player.playVideo();
-    //     $('#progressBar').show();
-    //     var playerTotalTime = player.getDuration();
-    //     mytimer = setInterval(function () {
-    //         var playerCurrentTime = Math.round(player.getCurrentTime());
-    //         var playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100;
-    //         var playerTimePercent = Math.round(playerTimeDifference);
-    //         console.log(playerTimePercent);
-    //         progress(playerTimePercent, $('#progressBar'));
-    //     }, 1000);
-    // });
-
     //自訂按鈕
     document.querySelector("#mute-toggle").addEventListener('click', function () {
         isMute = !isMute
         var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
         if (isMute) {
             playVideo_mute(isVideo_activeIndex)
-            document.querySelector("#nuMute").style.display = 'block'
-            document.querySelector("#mute").style.display = 'none'
+            togger("#nuMute", "#mute")
         }
         else {
             stopVideo_unMute(isVideo_activeIndex)
-            document.querySelector("#nuMute").style.display = 'none'
-            document.querySelector("#mute").style.display = 'block'
+            togger("#nuMute", "#mute")
         }
     })
     document.querySelector("#playBtn").addEventListener('click', function () {
         window.clearTimeout(t);
         var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
-
-        document.querySelector("#playBtn").style.display = 'none'
-        document.querySelector("#pauseBtn").style.display = 'block'
+        togger("#playBtn", "#pauseBtn")
         YT.get(isVideo_activeIndex.querySelector('iframe').id).playVideo();
 
     })
     document.querySelector("#pauseBtn").addEventListener('click', function () {
         window.clearTimeout(t);
         var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
-
-        document.querySelector("#pauseBtn").style.display = 'none'
-        document.querySelector("#playBtn").style.display = 'block'
+        togger("#playBtn", "#pauseBtn")
         YT.get(isVideo_activeIndex.querySelector('iframe').id).pauseVideo();
-        
+
     })
+
+    function togger(a, b, init) {
+        var aDOM = document.querySelector(a);
+        var bDOM = document.querySelector(b);
+        if (init === true) {
+            document.querySelector("#playBtn").style.display = "none";
+            document.querySelector("#pauseBtn").style.display = "block";
+            document.querySelector(".progressTxt").style.display = "block";
+            if (isMute) {
+                document.querySelector("#nuMute").style.display = "block";
+                document.querySelector("#mute").style.display = "none";
+            }
+            return
+        }
+        if (aDOM.style.display === "none") {
+            aDOM.style.display = "block";
+            bDOM.style.display = "none";
+        }
+        else if (aDOM.style.display === "block") {
+            aDOM.style.display = "none";
+            bDOM.style.display = "block";
+        }
+    }
 
     function playVideo_mute(isVideo_activeIndex) {
         YT.get(isVideo_activeIndex.querySelector('iframe').id).mute();
     }
     function stopVideo_unMute(isVideo_activeIndex) {
-        YT.get(isVideo_activeIndex.querySelector('iframe').id).unMute();
-        //sconsole.log('不靜音')
+        YT.get(isVideo_activeIndex.querySelector('iframe').id).unMute(); //不靜音
     }
 
     function onPlayerStateChange(event) {
         window.clearTimeout(t);
-        //console.log(event)
-        // var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex].querySelector('.video-container');
         let isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
+        if (isVideo_activeIndex.children[0].dataset.type == "img") {
+            //console.log('isImg')
+            return
+        }
+        let totalTime = parseInt(YT.get(isVideo_activeIndex.querySelector('iframe').id).getDuration()),
+            Total_Minute = Math.floor(Math.floor(totalTime % 3600) / 60),
+            Total_Second = Math.floor(totalTime % 60);
+        document.querySelector('#progress').setAttribute('max', totalTime)
+        totalTime = document.getElementById("progress").max
+        document.querySelector('#totalTime').textContent = Total_Minute + ":" + Total_Second
 
         if (event.data === 0) {
             //console.log("影片" + event.target.h.id + "播完換下一部")
-
             setTimeout(function () {
-                document.getElementById("progress").value = 0;
+                showVideoTime("0", "0", 0, 100);
                 swiper_youtube.slideNext();
             }, 1000)
         }
-        if (event.data !== null) {
-            if (isVideo_activeIndex.children[0].dataset.type == "img") {
-                //console.log('isImg')
-                return
-            }
-            let totalTime = parseInt(YT.get(isVideo_activeIndex.querySelector('iframe').id).getDuration()),
-                Total_Minute = Math.floor(Math.floor(totalTime % 3600) / 60),
-                Total_Second = Math.floor(totalTime % 60);
-            document.querySelector('#progress').setAttribute('max', totalTime)
-            document.querySelector('#totalTime').textContent = Total_Minute + ":" + Total_Second
-        }
         if (event.data === 1) {
-            isTime(isVideo_activeIndex)
+            isTime(isVideo_activeIndex, totalTime)
         }
-        if (event.data === 2) {
-            //console.log('暫停')
-            //window.clearTimeout(t);
-        }
-
+        if (event.data === 2) { }
         if (event.data === null) {
             //一開始初始youtube時，如果沒回傳結果才會執行
-            document.querySelector("#playBtn").style.display = 'none'
-            document.querySelector("#pauseBtn").style.display = 'block'
             YT.get(isVideo_activeIndex.querySelector('iframe').id).playVideo();
         }
     }
@@ -223,67 +255,44 @@ var ytplayer, isMute = true, timeID, t, time, palyingTime
         //console.log("影片" + event.target.h.id + "加載完完")
     }
 
-    function isTime(isVideo_activeIndex) {
-        var palyingTime
-        //console.log(seekTo)
-        if (isVideo_activeIndex.children[0].dataset.type == "img") {
-            //console.log('isImg')
-            return
+    function isTime(isVideo_activeIndex, totalTime) {
+        var palyingTime, Cal_Minute, Cal_Second;
+        palyingTime = parseInt(YT.get(isVideo_activeIndex.querySelector('iframe').id).getCurrentTime())
+        Cal_Minute = Math.floor(Math.floor(palyingTime) % 3600 / 60)
+        Cal_Second = Math.floor(palyingTime % 60);
+        if (palyingTime < 1) {
+            Cal_Second = Cal_Second + 1
+            palyingTime = palyingTime + 1
         }
-
-
-         
-         
-
-            // if(seekTo == undefined ){
-                
-                palyingTime = parseInt(YT.get(isVideo_activeIndex.querySelector('iframe').id).getCurrentTime())
-                
-            // }else{
-            //     //console.log('ok')
-            //     palyingTime = seekTo
-            // }
-
-            let Cal_Minute = Math.floor(Math.floor(palyingTime) % 3600 / 60),
-            Cal_Second = Math.floor(palyingTime % 60);
-            console.log("計時器前",palyingTime)
-            // document.querySelector('#progress').setAttribute('value', palyingTime)
-            document.getElementById("progress").value = palyingTime;
-            document.querySelector('#palyingTime').textContent = Cal_Minute + ":" + Cal_Second
+        showVideoTime(Cal_Minute, Cal_Second, palyingTime, totalTime);
 
         t = setTimeout(function () {
-            palyingTime = parseInt(YT.get(isVideo_activeIndex.querySelector('iframe').id).getCurrentTime());
-            console.log("計時器，用youtube抓時間",palyingTime)
-            Cal_Minute = Math.floor(Math.floor(palyingTime) % 3600 / 60);
-            Cal_Second = Math.floor(palyingTime % 60);
-
-            // document.querySelector('#progress').setAttribute('value', palyingTime)
-            document.getElementById("progress").value = palyingTime;
-            document.querySelector('#palyingTime').textContent = Cal_Minute + ":" + Cal_Second
-
-            isTime(isVideo_activeIndex)
+            window.clearTimeout(t);
+            isTime(isVideo_activeIndex, totalTime)
         }, 1000);
     }
+    // }
+
+    document.querySelector("#progress").addEventListener('change', function (e) {
+        window.clearTimeout(t);
+        //console.log("当前滑块值: ", e.target.value);
+        let isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
+        let totalTime = document.getElementById("progress").max
+        let seekToValue = e.target.value
+        let Cal_Minute = Math.floor(Math.floor(seekToValue % 3600) / 60),
+            Cal_Second = Math.floor(seekToValue % 60);
+        showVideoTime(Cal_Minute, Cal_Second, seekToValue, totalTime);
+        YT.get(isVideo_activeIndex.querySelector('iframe').id).seekTo(seekToValue, true)
+    })
 
 
+    function showVideoTime(Cal_Minute, Cal_Second, palyingTime, totalTime) {
+        let percent = (palyingTime / totalTime) * 100
 
-
-// }
-
-document.querySelector("#progress").addEventListener('change', function (e) {
-    window.clearTimeout(t);
-    console.log("当前滑块值: ", e.target.value);
-    value = e.target.value
-    
-    var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
-    YT.get(isVideo_activeIndex.querySelector('iframe').id).seekTo(value, true)
-    // console.log(value)
-    //isTime(isVideo_activeIndex,value)
-    
-})
-
-// const sliderRange = document.querySelector("#progress");
-//     sliderRange.onchange = e => {
-//         console.log("当前滑块值: ", e.target.value);
-//     };
+        document.querySelector('#palyingTime').textContent = Cal_Minute + ":" + Cal_Second
+        document.getElementById("progress").value = palyingTime;
+        document.getElementById("progress").setAttribute("value", palyingTime);
+        document.getElementById("progress").style.background = 'linear-gradient(to right, rgba(199, 22, 22,0.5) 0%, rgba(199, 22, 22,0.5) ' + percent + '%, rgba(255, 255, 255, 0.2) ' + percent + '%, white 100%)'
+    };
+}
 
