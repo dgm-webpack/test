@@ -13,7 +13,15 @@ function linkInit() {
     //插件加載中顯示的畫面
     document.querySelector('.video-swiper-wrapper').style.backgroundImage = "url('sec01.jpg')"
     document.querySelector('.video-swiper-wrapper').style.backgroundSize = "cover"
+    document.querySelector('.video-swiper-wrapper').style.overflow = "hidden"
+    document.querySelector('.video-swiper-wrapper').style.height = "62vw"
     document.querySelector('.youtubeTool').style.visibility = 'hidden'
+
+    document.querySelectorAll('.swiper-slide').forEach(function(item){
+        item.style.visibility = 'hidden'
+    })
+    // position: absolute;
+    // document.querySelector('.youtubeTool').style.opacity = '0'
 
     for (let i = 0; i < csss.length; i++) {
         var tag = document.createElement('link');
@@ -37,8 +45,6 @@ function linkInit() {
                 }
                 if (n == jss.length) {
                     init()
-                    document.querySelector('.video-swiper-wrapper').style.background = 'none'
-                    document.querySelector('.youtubeTool').style.visibility = 'visible'
                 }
             }
         }
@@ -48,7 +54,7 @@ function linkInit() {
 function init() {
 
     var titles = ['Page 1', 'Page 2', 'Page 3'];
-    var swiper_youtube = new Swiper('.swiper-youtube-container', {
+    var mySwiper = new Swiper('.swiper-youtube-container', {
         loop: true,  // 循環
         init: true,
         slidesPerView: 1,
@@ -75,13 +81,21 @@ function init() {
         },
         on: {
             init: function (swiper) {
+                console.log("透過swiper的init")
                 //Swiper初始化了
                 // alert('当前的slide序号是' + this.activeIndex);//或者swiper.activeIndex，swiper与this都可指代当前swiper实例
                 window.onYouTubePlayerAPIReady = function () {
+                    console.log("onYouTubePlayerAPIReady")
                     var container = document.querySelectorAll('.video-container');
                     for (var i = 0; i < container.length; i++) {
                         initPlayer(container[i])
                     }
+                    document.querySelector('.video-swiper-wrapper').style.background = 'none'
+                    document.querySelector('.youtubeTool').style.visibility = 'visible'
+                    document.querySelector('.video-swiper-wrapper').style.height = "auto"
+                    document.querySelectorAll('.swiper-slide').forEach(function(item){
+                        item.style.visibility = 'visible'
+                    })
                 }
 
 
@@ -115,16 +129,17 @@ function init() {
             },
         }
     }).on('slideChange', function () {
-        let init
-        let isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
-        let isVideo_previousIndex = swiper_youtube.slides[swiper_youtube.previousIndex]
+        let isVideo_activeIndex = mySwiper.slides[mySwiper.activeIndex]
+        let isVideo_previousIndex = mySwiper.slides[mySwiper.previousIndex]
         //console.log(isVideo_activeIndex.children[0].dataset.type) //檢查是影片還是圖片
+        //onsole.log(mySwiper.slides)
+        //console.log(mySwiper.activeIndex)
 
         //停止上一卡還在播放的影片；如果上一卡是圖片則取消跳轉計時
         //播放當前卡，如果是影片則播放；圖片則計時跳轉
         //console.log(isVideo_activeIndex.children[0].dataset.type)
         if (isVideo_activeIndex.children[0].dataset.type == "video") {
-            swiper_youtube.allowTouchMove = false //阻止手指滑動          
+            mySwiper.allowTouchMove = false //阻止手指滑動          
             document.querySelector("#mute-toggle").style.visibility = "visible"
             document.querySelector("#playBtn").style.visibility = 'visible'
             document.querySelector("#pauseBtn").style.visibility = 'visible'
@@ -139,8 +154,8 @@ function init() {
             }
             YT.get(isVideo_activeIndex.querySelector('iframe').id).playVideo();
         } else {
-            swiper_youtube.allowTouchMove = true//允許手指滑動
-            //console.log(swiper_youtube.allowTouchMove)
+            mySwiper.allowTouchMove = true//允許手指滑動
+            //console.log(mySwiper.allowTouchMove)
             document.querySelector("#mute-toggle").style.visibility = "hidden"
             document.querySelector("#playBtn").style.visibility = 'hidden'
             document.querySelector("#pauseBtn").style.visibility = 'hidden'
@@ -149,7 +164,7 @@ function init() {
 
             timeID = window.setTimeout(function () {
                 //console.log('圖片5秒換下')
-                swiper_youtube.slideNext();
+                mySwiper.slideNext();
             }, 5000)
         }
 
@@ -164,7 +179,7 @@ function init() {
     //自訂按鈕
     document.querySelector("#mute-toggle").addEventListener('click', function () {
         isMute = !isMute
-        var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
+        var isVideo_activeIndex = mySwiper.slides[mySwiper.activeIndex]
         if (isMute) {
             playVideo_mute(isVideo_activeIndex)
             togger("#nuMute", "#mute")
@@ -175,15 +190,16 @@ function init() {
         }
     })
     document.querySelector("#playBtn").addEventListener('click', function () {
-        window.clearTimeout(t);
-        var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
+        var isVideo_activeIndex = mySwiper.slides[mySwiper.activeIndex]
+        // console.log(isVideo_activeIndex)
         togger("#playBtn", "#pauseBtn")
         YT.get(isVideo_activeIndex.querySelector('iframe').id).playVideo();
+        //測試是否可用dom元素來控制
+        // console.log(isVideo_activeIndex.querySelector('iframe').id)
 
     })
     document.querySelector("#pauseBtn").addEventListener('click', function () {
-        window.clearTimeout(t);
-        var isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
+        var isVideo_activeIndex = mySwiper.slides[mySwiper.activeIndex]
         togger("#playBtn", "#pauseBtn")
         YT.get(isVideo_activeIndex.querySelector('iframe').id).pauseVideo();
 
@@ -221,7 +237,7 @@ function init() {
 
     function onPlayerStateChange(event) {
         window.clearTimeout(t);
-        let isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
+        let isVideo_activeIndex = mySwiper.slides[mySwiper.activeIndex]
         if (isVideo_activeIndex.children[0].dataset.type == "img") {
             //console.log('isImg')
             return
@@ -237,10 +253,11 @@ function init() {
             //console.log("影片" + event.target.h.id + "播完換下一部")
             setTimeout(function () {
                 showVideoTime("0", "0", 0, 100);
-                swiper_youtube.slideNext();
+                mySwiper.slideNext();
             }, 1000)
         }
         if (event.data === 1) {
+            console.log("播放")
             isTime(isVideo_activeIndex, totalTime)
         }
         if (event.data === 2) { }
@@ -276,7 +293,7 @@ function init() {
     document.querySelector("#progress").addEventListener('change', function (e) {
         window.clearTimeout(t);
         //console.log("当前滑块值: ", e.target.value);
-        let isVideo_activeIndex = swiper_youtube.slides[swiper_youtube.activeIndex]
+        let isVideo_activeIndex = mySwiper.slides[mySwiper.activeIndex]
         let totalTime = document.getElementById("progress").max
         let seekToValue = e.target.value
         let Cal_Minute = Math.floor(Math.floor(seekToValue % 3600) / 60),
