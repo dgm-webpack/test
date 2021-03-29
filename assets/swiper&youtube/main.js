@@ -83,6 +83,7 @@ function init() {
             init: function (swiper) {
                 console.log("透過swiper的init")
                 //Swiper初始化了
+                
                 // alert('当前的slide序号是' + this.activeIndex);//或者swiper.activeIndex，swiper与this都可指代当前swiper实例
                 window.onYouTubePlayerAPIReady = function () {
                     console.log("onYouTubePlayerAPIReady")
@@ -112,9 +113,11 @@ function init() {
                                 'autoplay': 1,
                                 'modestbranding': 1,
                                 'controls': 0, //0隱藏youtube工具列，使用自訂工具列
-                                'rel': 0,
                                 'autohide': 0,
-                                'playsinline': 1
+                                'playsinline': 1,
+                                'widget_referrer': location.origin,
+                                'enablejsapi': 1,
+								'origin': location.origin,
                             },
                             videoId: element.dataset.id,
                             events: {
